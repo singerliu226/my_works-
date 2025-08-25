@@ -2,11 +2,11 @@
   "type": "node",
   "build": {
     "installCommand": "npm i",
-    "buildCommand": "npm run build",
-    "outputDirectory": "dist"
+    "buildCommand": "echo skip",
+    "outputDirectory": ""
   },
   "run": {
-    "command": "node dist/index.js",
+    "command": "npx tsx src/index.ts",
     "port": 3000
   },
   "env": {
