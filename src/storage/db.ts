@@ -1,4 +1,6 @@
 import Datastore from 'nedb-promises';
+import fs from 'node:fs';
+import path from 'node:path';
 import { createLogger } from '../logger';
 
 const logger = createLogger('db');
@@ -8,8 +10,12 @@ const logger = createLogger('db');
  * 原因：纯 JS，无需原生编译，适合个人小工具；支持简单查询与索引
  * 实现：articles、events 两个集合；对 urlHash 建索引防重复
  */
-export const articles = Datastore.create({ filename: './data/articles.db', autoload: true, timestampData: true }) as any;
-export const events = Datastore.create({ filename: './data/events.db', autoload: true, timestampData: true }) as any;
+// 确保数据目录存在（容器/无卷时避免路径缺失导致的启动失败）
+const dataDir = path.resolve('./data');
+try { fs.mkdirSync(dataDir, { recursive: true }); } catch { /* ignore */ }
+
+export const articles = Datastore.create({ filename: path.join(dataDir, 'articles.db'), autoload: true, timestampData: true }) as any;
+export const events = Datastore.create({ filename: path.join(dataDir, 'events.db'), autoload: true, timestampData: true }) as any;
 
 // 唯一索引：urlHash
 // @ts-ignore

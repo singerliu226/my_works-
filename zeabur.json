@@ -1,20 +1,14 @@
 {
   "type": "node",
   "build": {
-    "installCommand": "npm i",
-    "buildCommand": "echo skip",
-    "outputDirectory": ""
+    "installCommand": "npm i --production=false",
+    "buildCommand": "npm run build",
+    "outputDirectory": "dist"
   },
   "run": {
-    "command": "npx tsx src/index.ts",
+    "command": "npm start",
     "port": 3000
-  },
-  "env": {
-    "NODE_ENV": "production"
-  },
-  "volumes": [
-    { "target": "/app/data", "name": "hotspot-data" }
-  ]
+  }
 }
 
 
