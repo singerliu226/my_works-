@@ -49,7 +49,7 @@ async function tick(cfg: Config) {
     if (cfg.tophub?.enabled) tasks.push({ id: 'tophub', kind: 'tophub', promise: fetchTopHub(cfg.tophub.entry) });
     for (const r of cfg.rss?.filter(r => r.enabled) || []) tasks.push({ id: r.id, kind: 'rss', promise: fetchRss(r.entry, r.id, r.type) });
     for (const h of cfg.html?.filter(h => h.enabled) || []) tasks.push({ id: h.id, kind: 'html', promise: fetchHtmlList(h.entry, h.id, h.type, { allowedHosts: (h as any).allowedHosts, hrefPatterns: (h as any).hrefPatterns }) });
-    const counts = await Promise.all(tasks.map(tickOnce));
+    const counts = await Promise.all(tasks.map((t) => tickOnce(t)));
     const total = counts.reduce((a, b) => a + b, 0);
 
     // 入库
