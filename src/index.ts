@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import yaml from 'js-yaml';
 import cron from 'node-cron';
 import { createServer } from './server.js';
@@ -23,10 +24,21 @@ type Config = {
 };
 
 function loadConfig(): Config {
-    const cfgPath = path.resolve('./configs/sources.yaml');
-    const cfg = yaml.load(fs.readFileSync(cfgPath, 'utf-8')) as any;
-    runtimeState.config = cfg;
-    return cfg as Config;
+    const cwdPath = path.resolve(process.cwd(), 'configs/sources.yaml');
+    const currentDir = path.dirname(fileURLToPath(import.meta.url));
+    const distPath = path.resolve(currentDir, '../configs/sources.yaml');
+    let used: string | null = null;
+    if (fs.existsSync(cwdPath)) used = cwdPath;
+    else if (fs.existsSync(distPath)) used = distPath;
+    if (used) {
+        const cfg = yaml.load(fs.readFileSync(used, 'utf-8')) as any;
+        runtimeState.config = cfg;
+        return cfg as Config;
+    }
+    // 容错：未找到配置文件时，提供空配置以保证服务至少可启动
+    const fallback: Config = { tophub: { enabled: false, entry: '', frequencySec: 60 }, rss: [], html: [] } as any;
+    runtimeState.config = fallback;
+    return fallback;
 }
 
 async function tickOnce(batch: RawBatch) {
