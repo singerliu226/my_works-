@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import { articles, events } from './storage/db';
 import { rebuildRecentClusters } from './cluster';
 import { runtimeState } from './state';
@@ -6,7 +6,7 @@ import { runtimeState } from './state';
 export function createServer() {
     const app = express();
 
-    app.get('/feed', async (req, res) => {
+    app.get('/feed', async (req: Request, res: Response) => {
         const { limit = '100', sourceId, type, q, sinceMinutes } = req.query as Record<string, string>;
         const query: any = {};
         if (sourceId) query.sourceId = sourceId;
@@ -24,13 +24,13 @@ export function createServer() {
         res.json(rows.slice(0, Math.min(500, Math.max(1, Number(limit) || 100))));
     });
 
-    app.get('/items/:id', async (req, res) => {
+    app.get('/items/:id', async (req: Request, res: Response) => {
         const row = await articles.findOne({ _id: req.params.id });
         if (!row) return res.status(404).json({ error: 'not found' });
         res.json(row);
     });
 
-    app.get('/events', async (req, res) => {
+    app.get('/events', async (req: Request, res: Response) => {
         const rows = await events.find({}, { _id: 0 });
         rows.sort((a: any, b: any) => new Date(b.updatedAt || 0).getTime() - new Date(a.updatedAt || 0).getTime());
         const wantsHtml = /text\/html/.test(String(req.headers.accept)) || String(req.url).includes('view=html');
@@ -79,16 +79,16 @@ export function createServer() {
         }
     });
 
-    app.get('/health', (_req, res) => {
+    app.get('/health', (_req: Request, res: Response) => {
         res.json({ ok: true, time: new Date().toISOString() });
     });
 
-    app.post('/recluster', async (_req, res) => {
+    app.post('/recluster', async (_req: Request, res: Response) => {
         await rebuildRecentClusters(200, 0.65);
         res.json({ ok: true });
     });
 
-    app.get('/rss/:sourceId', async (req, res) => {
+    app.get('/rss/:sourceId', async (req: Request, res: Response) => {
         const { sourceId } = req.params;
         const items = await articles.find({ sourceId }, { title: 1, url: 1, summary: 1, publishTime: 1, firstSeenAt: 1 });
         items.sort((a: any, b: any) => new Date(b.firstSeenAt || 0).getTime() - new Date(a.firstSeenAt || 0).getTime());
@@ -112,12 +112,12 @@ export function createServer() {
         res.send(rss);
     });
 
-    app.get('/sources', (_req, res) => {
+    app.get('/sources', (_req: Request, res: Response) => {
         const list = Array.from(runtimeState.sourceStatus.values());
         res.json(list);
     });
 
-    app.get('/', async (_req, res) => {
+    app.get('/', async (_req: Request, res: Response) => {
         const html = `<!doctype html><html lang="zh"><head><meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <title>热点流</title>
