@@ -61,7 +61,7 @@ async function tick(cfg: Config) {
     const list = await articles.find({}, { id: 1, title: 1, firstSeenAt: 1, publishTime: 1, heatRank: 1 });
     list.sort((a: any, b: any) => (b._id as any) - (a._id as any));
     for (const row of list as any[]) {
-        const isAnchored = anchors.some(t => t === row.title);
+        const isAnchored = anchors.some((t: string) => t === row.title);
         const publishMs = row.publishTime ? Date.parse(row.publishTime) : undefined;
         const firstSeenMs = Date.parse(row.firstSeenAt);
         const { score } = scoreItem({ publishMs, firstSeenMs, heatRank: row.heatRank || undefined, isAnchored, title: row.title });
