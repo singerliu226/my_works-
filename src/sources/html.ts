@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { load } from 'cheerio';
 import { URL } from 'node:url';
-import { createLogger } from '../logger';
-import type { RawItem } from '../types';
+import { createLogger } from '../logger.js';
+import type { RawItem } from '../types.js';
 
 const logger = createLogger('src:html');
 

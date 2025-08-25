@@ -2,16 +2,16 @@ import fs from 'node:fs';
 import path from 'node:path';
 import yaml from 'js-yaml';
 import cron from 'node-cron';
-import { createServer } from './server';
-import { createLogger } from './logger';
-import { fetchTopHub } from './sources/tophub';
-import { fetchRss } from './sources/rss';
-import { fetchHtmlList } from './sources/html';
-import { upsertArticles } from './pipeline';
-import { articles } from './storage/db';
-import { scoreItem } from './scoring';
-import { rebuildRecentClusters } from './cluster';
-import { runtimeState, setSourceStatus } from './state';
+import { createServer } from './server.js';
+import { createLogger } from './logger.js';
+import { fetchTopHub } from './sources/tophub.js';
+import { fetchRss } from './sources/rss.js';
+import { fetchHtmlList } from './sources/html.js';
+import { upsertArticles } from './pipeline.js';
+import { articles } from './storage/db.js';
+import { scoreItem } from './scoring.js';
+import { rebuildRecentClusters } from './cluster.js';
+import { runtimeState, setSourceStatus } from './state.js';
 
 const logger = createLogger('main');
 try { await import('dotenv/config'); } catch { /* optional */ }

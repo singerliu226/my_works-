@@ -1,8 +1,8 @@
 import crypto from 'node:crypto';
-import { articles } from './storage/db';
-import type { RawItem } from './types';
-import { createLogger } from './logger';
-import { classifyByRules, classifyWithLLM } from './classifier';
+import { articles } from './storage/db.js';
+import type { RawItem } from './types.js';
+import { createLogger } from './logger.js';
+import { classifyByRules, classifyWithLLM } from './classifier.js';
 
 const logger = createLogger('pipeline');
 

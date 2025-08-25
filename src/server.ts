@@ -1,7 +1,7 @@
 import express, { Request, Response } from 'express';
-import { articles, events } from './storage/db';
-import { rebuildRecentClusters } from './cluster';
-import { runtimeState } from './state';
+import { articles, events } from './storage/db.js';
+import { rebuildRecentClusters } from './cluster.js';
+import { runtimeState } from './state.js';
 
 export function createServer() {
     const app = express();

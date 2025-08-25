@@ -1,6 +1,6 @@
 import Parser from 'rss-parser';
-import { createLogger } from '../logger';
-import type { RawItem } from '../types';
+import { createLogger } from '../logger.js';
+import type { RawItem } from '../types.js';
 
 const parser = new Parser({ timeout: 8000 });
 const logger = createLogger('src:rss');

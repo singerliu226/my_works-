@@ -1,7 +1,7 @@
 import Datastore from 'nedb-promises';
 import fs from 'node:fs';
 import path from 'node:path';
-import { createLogger } from '../logger';
+import { createLogger } from '../logger.js';
 
 const logger = createLogger('db');
 
